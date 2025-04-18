@@ -14,18 +14,24 @@ public class VideoDocument {
 
     private String title;
     private String url;
+    private String urlZip;
+    private Integer secondsPartition;
     private String clientId;
     private String status;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
-    protected VideoDocument() {}
+    protected VideoDocument() {
+    }
 
-    public VideoDocument(String title, String url, String clientId, String status, LocalDateTime createdAt) {
+    public VideoDocument(String title, String url, String clientId, String status, Integer secondsPartition, LocalDateTime createdAt) {
         this.title = title;
         this.url = url;
         this.clientId = clientId;
         this.status = status;
+        this.secondsPartition = secondsPartition;
         this.createdAt = createdAt;
+        this.updatedAt = null;
     }
 
     public String getId() {
@@ -70,5 +76,33 @@ public class VideoDocument {
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
+    }
+
+    public String getUrlZip() {
+        return urlZip;
+    }
+
+    public void setUrlZip(String urlZip) {
+        this.urlZip = urlZip;
+    }
+
+    public Integer getSecondsPartition() {
+        return secondsPartition;
+    }
+
+    public void setSecondsPartition(Integer secondsPartition) {
+        this.secondsPartition = secondsPartition;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
     }
 }

@@ -16,15 +16,18 @@ public class VideoRepositoryImpl implements VideoRepository {
         this.mongoRepository = mongoRepository;
     }
 
-    public void save(Video video) {
+    public String save(Video video) {
         VideoDocument doc = new VideoDocument(
                 video.getTitle(),
                 video.getUrl(),
                 video.getClientId(),
                 video.getStatus(),
+                video.getSecondsPartition(),
                 video.getCreatedAt()
         );
-        mongoRepository.save(doc);
+
+        VideoDocument saved = mongoRepository.save(doc);
+        return saved.getId();
     }
 
     @Override
@@ -36,7 +39,10 @@ public class VideoRepositoryImpl implements VideoRepository {
                         doc.getUrl(),
                         doc.getClientId(),
                         doc.getStatus(),
-                        doc.getCreatedAt()
+                        doc.getSecondsPartition(),
+                        doc.getUrlZip(),
+                        doc.getCreatedAt(),
+                        doc.getUpdatedAt()
                 )).toList();
     }
 }

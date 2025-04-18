@@ -23,11 +23,11 @@ public class ConfirmUploadUseCase {
         this.bucket = bucket;
     }
 
-    public Video execute(String title, String key, String clientId) {
+    public Video execute(String title, String key, String clientId, Integer secondsPartition) {
         String id = UUID.randomUUID().toString();
         String url = "https://" + bucket + ".s3.amazonaws.com/" + key;
 
-        Video video = new Video(title, url,clientId);
+        Video video = new Video(title, url,clientId,secondsPartition);
         videoRepository.save(video);
         sqsPublisher.publish(video);
 

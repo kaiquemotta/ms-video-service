@@ -28,9 +28,9 @@ public class CreateVideoUseCase {
         this.videoStorage = videoStorage;
     }
 
-    public Video createVideo(String title, String clientId, MultipartFile file) {
+    public Video createVideo(String title, String clientId, Integer secondPartition,MultipartFile file) {
         String s3Url = uploadFileToS3(file);
-        Video video = new Video(title, s3Url, clientId);
+        Video video = new Video(title, s3Url, clientId,secondPartition);
         saveVideo(video);
         publishToQueue(video);
         return video;
@@ -47,7 +47,8 @@ public class CreateVideoUseCase {
 
     private void saveVideo(Video video) {
         try {
-            videoRepository.save(video);
+            String documentId = videoRepository.save(video);
+            video.setId(documentId);
         } catch (Exception e) {
             log.error("Erro ao salvar vídeo no repositório", e);
             throw new VideoPersistenceException("Falha ao salvar o vídeo", e);
