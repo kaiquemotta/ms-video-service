@@ -4,7 +4,7 @@ import com.ms.video.domain.exception.VideoPersistenceException;
 import com.ms.video.domain.exception.VideoPublishException;
 import com.ms.video.domain.exception.VideoUploadException;
 import com.ms.video.domain.model.Video;
-import com.ms.video.port.output.SqsPublisher;
+import com.ms.video.port.output.VideoEventPublisher;
 import com.ms.video.port.output.VideoRepository;
 import com.ms.video.port.output.VideoStorage;
 import org.slf4j.Logger;
@@ -18,20 +18,20 @@ public class CreateVideoUseCase {
     private static final Logger log = LoggerFactory.getLogger(CreateVideoUseCase.class);
 
     private final VideoRepository videoRepository;
-    private final SqsPublisher sqsPublisher;
+    private final VideoEventPublisher videoEventPublisher;
     private final VideoStorage videoStorage;
 
-    public CreateVideoUseCase(VideoRepository videoRepository, SqsPublisher sqsPublisher, VideoStorage videoStorage) {
+    public CreateVideoUseCase(VideoRepository videoRepository, VideoEventPublisher videoEventPublisher, VideoStorage videoStorage) {
         this.videoRepository = videoRepository;
-        this.sqsPublisher = sqsPublisher;
+        this.videoEventPublisher = videoEventPublisher;
         this.videoStorage = videoStorage;
     }
 
-    public Video createVideo(String title,String clientId, MultipartFile file) {
-        String s3Url = videoStorage.upload(file);
-        Video video = new Video(title, s3Url,clientId);
-        videoRepository.save(video);
-        sqsPublisher.publish(video);
+    public Video createVideo(String title, String clientId, MultipartFile file) {
+        String s3Url = uploadFileToS3(file);
+        Video video = new Video(title, s3Url, clientId);
+        saveVideo(video);
+        publishToQueue(video);
         return video;
     }
 
@@ -55,10 +55,10 @@ public class CreateVideoUseCase {
 
     private void publishToQueue(Video video) {
         try {
-            sqsPublisher.publish(video);
+            videoEventPublisher.sendVideoUploadedEvent(video);
         } catch (Exception e) {
-            log.error("Erro ao publicar vídeo na fila", e);
-            throw new VideoPublishException("Falha ao enviar o vídeo para a fila", e);
+            log.error("Erro ao publicar vídeo no Kafka", e);
+            throw new VideoPublishException("Falha ao enviar o vídeo para o Kafka", e);
         }
     }
 }
