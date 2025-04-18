@@ -27,11 +27,12 @@ public class CreateVideoUseCase {
         this.videoStorage = videoStorage;
     }
 
-    public void createVideo(String title, MultipartFile file) {
-        var s3Url = uploadFileToS3(file);
-        var video = new Video(title, s3Url);
-        saveVideo(video);
-        publishToQueue(video);
+    public Video createVideo(String title, MultipartFile file) {
+        String s3Url = videoStorage.upload(file);
+        Video video = new Video(title, s3Url);
+        videoRepository.save(video);
+        sqsPublisher.publish(video);
+        return video;
     }
 
     private String uploadFileToS3(MultipartFile file) {

@@ -1,6 +1,8 @@
 package com.ms.video.adapter.input.rest;
 
+import com.ms.video.adapter.input.rest.dto.CreateVideoResponse;
 import com.ms.video.application.CreateVideoUseCase;
+import com.ms.video.domain.model.Video;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,11 +19,13 @@ public class VideoController {
     }
 
     @PostMapping(consumes = {"multipart/form-data"})
-    public ResponseEntity<?> create(
+    public ResponseEntity<CreateVideoResponse> create(
             @RequestParam("title") String title,
             @RequestParam("file") MultipartFile file
     ) {
-        createVideoUseCase.createVideo(title, file);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        Video created = createVideoUseCase.createVideo(title, file);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(new CreateVideoResponse(created.getId(), created.getUrl()));
     }
 }
