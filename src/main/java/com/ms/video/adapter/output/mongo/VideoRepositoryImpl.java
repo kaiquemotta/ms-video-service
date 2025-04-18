@@ -5,6 +5,8 @@ import com.ms.video.domain.model.Video;
 import com.ms.video.port.output.VideoRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class VideoRepositoryImpl implements VideoRepository {
 
@@ -19,8 +21,22 @@ public class VideoRepositoryImpl implements VideoRepository {
                 video.getTitle(),
                 video.getUrl(),
                 video.getClientId(),
-                video.getStatus()
+                video.getStatus(),
+                video.getCreatedAt()
         );
         mongoRepository.save(doc);
+    }
+
+    @Override
+    public List<Video> findByClientId(String clientId) {
+        return mongoRepository.findByClientId(clientId).stream()
+                .map(doc -> new Video(
+                        doc.getId(),
+                        doc.getTitle(),
+                        doc.getUrl(),
+                        doc.getClientId(),
+                        doc.getStatus(),
+                        doc.getCreatedAt()
+                )).toList();
     }
 }

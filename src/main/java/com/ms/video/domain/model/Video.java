@@ -29,10 +29,6 @@ public class Video {
         this.createdAt = createdAt;
     }
 
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -51,5 +47,9 @@ public class Video {
 
     public String getId() {
         return id;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 }

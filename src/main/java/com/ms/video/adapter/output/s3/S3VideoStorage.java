@@ -31,8 +31,9 @@ public class S3VideoStorage implements VideoStorage {
                     PutObjectRequest.builder()
                             .bucket(bucketName)
                             .key(key)
+                            .contentType(file.getContentType())
                             .build(),
-                    RequestBody.fromBytes(file.getBytes())
+                    RequestBody.fromInputStream(file.getInputStream(), file.getSize())
             );
 
             return "https://" + bucketName + ".s3.amazonaws.com/" + key;

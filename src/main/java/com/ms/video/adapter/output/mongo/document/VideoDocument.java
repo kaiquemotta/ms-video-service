@@ -4,6 +4,8 @@ package com.ms.video.adapter.output.mongo.document;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
+
 @Document(collection = "videos")
 public class VideoDocument {
 
@@ -13,15 +15,17 @@ public class VideoDocument {
     private String title;
     private String url;
     private String clientId;
-    private String status; // ✅ novo campo
+    private String status;
+    private LocalDateTime createdAt;
 
     protected VideoDocument() {}
 
-    public VideoDocument(String title, String url, String clientId, String status) {
+    public VideoDocument(String title, String url, String clientId, String status, LocalDateTime createdAt) {
         this.title = title;
         this.url = url;
         this.clientId = clientId;
         this.status = status;
+        this.createdAt = createdAt;
     }
 
     public String getId() {
@@ -62,5 +66,9 @@ public class VideoDocument {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 }
