@@ -1,0 +1,61 @@
+spring:
+  application:
+    name: video-service
+
+  output:
+    ansi:
+      enabled: ALWAYS
+
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      database: video-db
+
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+  kafka:
+    bootstrap-servers: localhost:9092
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://seu-auth.com/
+
+cloud:
+  aws:
+    credentials:
+      accessKey: -
+      secretKey: -
+
+aws:
+  region: us-east-1
+  s3:
+    bucket: video-storage-bucket-ter1
+
+sqs:
+  queue:
+    url: https://sqs.us-east-1.amazonaws.com/409139324592/video-upload-queue
+
+security:
+  jwt:
+    enabled: false
+
+logging:
+  level:
+    root: INFO
+    org:
+      springframework:
+        security: DEBUG
+        web: DEBUG
+        security.oauth2: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: loggers
