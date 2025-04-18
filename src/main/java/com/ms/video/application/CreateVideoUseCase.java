@@ -29,7 +29,7 @@ public class CreateVideoUseCase {
 
     public Video createVideo(String title,String clientId, MultipartFile file) {
         String s3Url = videoStorage.upload(file);
-        Video video = new Video(title, s3Url);
+        Video video = new Video(title, s3Url,clientId);
         videoRepository.save(video);
         sqsPublisher.publish(video);
         return video;

@@ -14,9 +14,13 @@ public class VideoRepositoryImpl implements VideoRepository {
         this.mongoRepository = mongoRepository;
     }
 
-    @Override
     public void save(Video video) {
-        VideoDocument doc = new VideoDocument(video.getTitle(), video.getUrl());
+        VideoDocument doc = new VideoDocument(
+                video.getTitle(),
+                video.getUrl(),
+                video.getClientId(),
+                video.getStatus()
+        );
         mongoRepository.save(doc);
     }
 }
