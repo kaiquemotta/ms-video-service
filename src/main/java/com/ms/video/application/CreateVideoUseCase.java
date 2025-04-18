@@ -27,7 +27,7 @@ public class CreateVideoUseCase {
         this.videoStorage = videoStorage;
     }
 
-    public Video createVideo(String title, MultipartFile file) {
+    public Video createVideo(String title,String clientId, MultipartFile file) {
         String s3Url = videoStorage.upload(file);
         Video video = new Video(title, s3Url);
         videoRepository.save(video);
