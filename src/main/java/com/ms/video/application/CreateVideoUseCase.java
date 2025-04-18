@@ -4,6 +4,7 @@ import com.ms.video.domain.exception.VideoPersistenceException;
 import com.ms.video.domain.exception.VideoPublishException;
 import com.ms.video.domain.exception.VideoUploadException;
 import com.ms.video.domain.model.Video;
+import com.ms.video.port.output.SqsPublisher;
 import com.ms.video.port.output.VideoEventPublisher;
 import com.ms.video.port.output.VideoRepository;
 import com.ms.video.port.output.VideoStorage;
@@ -18,10 +19,10 @@ public class CreateVideoUseCase {
     private static final Logger log = LoggerFactory.getLogger(CreateVideoUseCase.class);
 
     private final VideoRepository videoRepository;
-    private final VideoEventPublisher videoEventPublisher;
+    private final SqsPublisher videoEventPublisher;
     private final VideoStorage videoStorage;
 
-    public CreateVideoUseCase(VideoRepository videoRepository, VideoEventPublisher videoEventPublisher, VideoStorage videoStorage) {
+    public CreateVideoUseCase(VideoRepository videoRepository, SqsPublisher videoEventPublisher, VideoStorage videoStorage) {
         this.videoRepository = videoRepository;
         this.videoEventPublisher = videoEventPublisher;
         this.videoStorage = videoStorage;
@@ -55,10 +56,20 @@ public class CreateVideoUseCase {
 
     private void publishToQueue(Video video) {
         try {
-            videoEventPublisher.sendVideoUploadedEvent(video);
+            videoEventPublisher.publish(video);
         } catch (Exception e) {
-            log.error("Erro ao publicar vídeo no Kafka", e);
-            throw new VideoPublishException("Falha ao enviar o vídeo para o Kafka", e);
+            log.error("Erro ao publicar vídeo no SQS", e);
+            throw new VideoPublishException("Falha ao enviar o vídeo para o SQS", e);
         }
     }
+
+
+//    private void publishToQueue(Video video) {
+//        try {
+//            videoEventPublisher.sendVideoUploadedEvent(video);
+//        } catch (Exception e) {
+//            log.error("Erro ao publicar vídeo no Kafka", e);
+//            throw new VideoPublishException("Falha ao enviar o vídeo para o Kafka", e);
+//        }
+//    }
 }
