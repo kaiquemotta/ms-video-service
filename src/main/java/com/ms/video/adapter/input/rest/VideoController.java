@@ -31,6 +31,8 @@ public class VideoController {
         this.listVideosByClientUseCase = listVideosByClientUseCase;
     }
 
+
+
     @GetMapping
     public ResponseEntity<List<VideoResponse>> listByClient() {
         String clientId = extractClientIdFromToken();
