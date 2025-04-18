@@ -1,7 +1,10 @@
 package com.ms.video.adapter.input.rest;
 
+import com.ms.video.adapter.input.rest.dto.ConfirmUploadRequest;
+import com.ms.video.adapter.input.rest.dto.ConfirmUploadResponse;
 import com.ms.video.adapter.input.rest.dto.CreateVideoResponse;
 import com.ms.video.adapter.input.rest.dto.VideoResponse;
+import com.ms.video.application.ConfirmUploadUseCase;
 import com.ms.video.application.CreateVideoUseCase;
 import com.ms.video.application.ListVideosByClientUseCase;
 import com.ms.video.config.JwtSecurityProperties;
@@ -20,17 +23,20 @@ import java.util.List;
 public class VideoController {
 
     private final CreateVideoUseCase createVideoUseCase;
+
     private final ListVideosByClientUseCase listVideosByClientUseCase;
+
+    private final ConfirmUploadUseCase confirmUploadUseCase;
 
     private final JwtSecurityProperties jwtSecurityProperties;
 
     public VideoController(CreateVideoUseCase createVideoUseCase,
-                           JwtSecurityProperties jwtSecurityProperties, ListVideosByClientUseCase listVideosByClientUseCase) {
+                           JwtSecurityProperties jwtSecurityProperties, ListVideosByClientUseCase listVideosByClientUseCase, ConfirmUploadUseCase confirmUploadUseCase) {
         this.createVideoUseCase = createVideoUseCase;
         this.jwtSecurityProperties = jwtSecurityProperties;
         this.listVideosByClientUseCase = listVideosByClientUseCase;
+        this.confirmUploadUseCase = confirmUploadUseCase;
     }
-
 
 
     @GetMapping
@@ -53,6 +59,14 @@ public class VideoController {
         var created = createVideoUseCase.createVideo(title, clientId, file);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new CreateVideoResponse(created.getId(), created.getUrl()));
+    }
+
+    @PostMapping("/confirm-upload")
+    public ResponseEntity<ConfirmUploadResponse> confirm(@RequestBody ConfirmUploadRequest request) {
+        String clientId = resolveClientId();
+        var video = confirmUploadUseCase.execute(request.title(), request.key(), clientId);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new ConfirmUploadResponse(video.getId(), video.getUrl(), video.getStatus()));
     }
 
     private String resolveClientId() {
