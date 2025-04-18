@@ -17,11 +17,11 @@ public class VideoController {
     }
 
     @PostMapping(consumes = {"multipart/form-data"})
-    public ResponseEntity<Void> create(
+    public ResponseEntity<?> create(
             @RequestParam("title") String title,
             @RequestParam("file") MultipartFile file
     ) {
-        createVideoUseCase.execute(title, file);
+        createVideoUseCase.createVideo(title, file);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
