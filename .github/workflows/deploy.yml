@@ -44,3 +44,10 @@ jobs:
       - name: Push para o ECR
         run: |
           docker push 409139324592.dkr.ecr.us-east-1.amazonaws.com/video-service:latest
+
+      - name: Forçar novo deploy no ECS
+        run: |
+          aws ecs update-service \
+            --cluster video-cluster \
+            --service video-service \
+            --force-new-deployment
