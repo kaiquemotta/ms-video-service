@@ -1,28 +1,31 @@
-name: Build and Deploy to AWS Fargate
+name: Deploy to AWS ECS
 
 on:
   push:
     branches: [ master ]
 
+env:
+  AWS_REGION: us-east-1
+  ECR_REPOSITORY: video-service
+  ECS_CLUSTER: video-cluster
+  ECS_SERVICE: video-service
+  TASK_DEFINITION_FILE: ecs-task-definition.json
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
-    env:
-      MONGO_USER: ${{ secrets.MONGO_USER }}
-      MONGO_PASSWORD: ${{ secrets.MONGO_PASSWORD }}
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      SQS_QUEUE_URL: ${{ secrets.SQS_QUEUE_URL }}
-
     steps:
-      - name: Checkout repo
+      - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Permissão no Maven Wrapper
-        run: chmod +x ./mvnw
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
 
-      - name: Build com Maven
+      - name: Build project
         run: ./mvnw clean package -DskipTests
 
       - name: Configure AWS credentials
@@ -30,24 +33,38 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
+          aws-region: ${{ env.AWS_REGION }}
 
-      - name: Login no ECR
+      - name: Login to Amazon ECR
         run: |
-          aws ecr get-login-password | docker login --username AWS --password-stdin 409139324592.dkr.ecr.us-east-1.amazonaws.com
+          aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.$AWS_REGION.amazonaws.com
 
-      - name: Build da imagem Docker
+      - name: Build and Push Docker image
         run: |
-          docker build -t video-service .
-          docker tag video-service:latest 409139324592.dkr.ecr.us-east-1.amazonaws.com/video-service:latest
+          IMAGE_TAG=latest
+          IMAGE_URI=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
+          docker build -t $IMAGE_URI .
+          docker push $IMAGE_URI
+          echo "IMAGE_URI=$IMAGE_URI" >> $GITHUB_ENV
 
-      - name: Push para o ECR
-        run: |
-          docker push 409139324592.dkr.ecr.us-east-1.amazonaws.com/video-service:latest
+      - name: Render task definition
+        id: render
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: ${{ env.TASK_DEFINITION_FILE }}
+          container-name: video-app
+          image: ${{ env.IMAGE_URI }}
+          environment-variables: |
+            AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
+            AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            MONGO_USER=${{ secrets.MONGO_USER }}
+            MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }}
+            SQS_QUEUE_URL=${{ secrets.SQS_QUEUE_URL }}
 
-      - name: Forçar novo deploy no ECS
-        run: |
-          aws ecs update-service \
-            --cluster video-cluster \
-            --service video-service \
-            --force-new-deployment
+      - name: Deploy to ECS
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.render.outputs.task-definition }}
+          service: ${{ env.ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          wait-for-service-stability: true
