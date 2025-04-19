@@ -11,7 +11,7 @@ server:
 
   data:
     mongodb:
-      uri: mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@video-db.yjexuqs.mongodb.net/video-db?retryWrites=true&w=majority
+      uri: ${MONGO_URI}
 
   servlet:
     multipart:
@@ -52,9 +52,9 @@ logging:
     root: DEBUG
     org:
       springframework:
-        web: DEBUG
-        security: DEBUG
-        security.oauth2: DEBUG
+        web: INFO
+        security: INFO
+        security.oauth2: INFO
         boot:
           actuate:
             health: INFO
