@@ -20,11 +20,17 @@ public class SqsPublisherImpl implements SqsPublisher {
 
     @Override
     public void publish(Video video) {
+        String payload = """
+                {
+                  "id": "%s",
+                  "url": "%s"
+                }
+                """.formatted(video.getId(), video.getUrl());
+
         SendMessageRequest request = SendMessageRequest.builder()
                 .queueUrl(queueUrl)
-                .messageBody("New video: " + video.getTitle())
+                .messageBody(payload)
                 .build();
-
         sqsClient.sendMessage(request);
     }
 }
