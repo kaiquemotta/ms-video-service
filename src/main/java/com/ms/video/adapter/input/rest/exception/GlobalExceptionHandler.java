@@ -4,7 +4,7 @@ package com.ms.video.adapter.input.rest.exception;
 import com.ms.video.domain.exception.VideoUploadException;
 import com.ms.video.domain.exception.VideoPersistenceException;
 import com.ms.video.domain.exception.VideoPublishException;
-import jakarta.servlet.http.HttpServletRequest; // ✅ esse aqui!
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
