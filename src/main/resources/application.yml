@@ -8,9 +8,7 @@ spring:
 
   data:
     mongodb:
-      host: localhost
-      port: 27017
-      database: video-db
+      uri: mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@video-db.yjexuqs.mongodb.net/video-db?retryWrites=true&w=majority&appName=video-db
 
   servlet:
     multipart:
@@ -18,7 +16,7 @@ spring:
       max-request-size: 50MB
 
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: ${KAFKA_BOOTSTRAP:localhost:9092}
 
   security:
     oauth2:
@@ -29,8 +27,9 @@ spring:
 cloud:
   aws:
     credentials:
-      accessKey: -
-      secretKey: -
+      accessKey: ${AWS_ACCESS_KEY_ID}
+      secretKey: ${AWS_SECRET_ACCESS_KEY}
+
 
 aws:
   region: us-east-1
@@ -39,7 +38,7 @@ aws:
 
 sqs:
   queue:
-    url: https://sqs.us-east-1.amazonaws.com/409139324592/video-upload-queue
+    url: ${SQS_QUEUE_URL}
 
 security:
   jwt:
