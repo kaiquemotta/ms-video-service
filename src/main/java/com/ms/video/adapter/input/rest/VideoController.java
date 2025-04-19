@@ -62,13 +62,13 @@ public class VideoController {
                 .body(new CreateVideoResponse(created.getId(), created.getUrl()));
     }
 
-//    @PostMapping("/confirm-upload")
-//    public ResponseEntity<ConfirmUploadResponse> confirm(@RequestBody ConfirmUploadRequest request) {
-//        String clientId = resolveClientId();
-//        var video = confirmUploadUseCase.execute(request.title(), request.key(), clientId,);
-//        return ResponseEntity.status(HttpStatus.CREATED)
-//                .body(new ConfirmUploadResponse(video.getId(), video.getUrl(), video.getStatus()));
-//    }
+    @PostMapping("/confirm-upload")
+    public ResponseEntity<ConfirmUploadResponse> confirm(@RequestBody ConfirmUploadRequest request) {
+        String clientId = resolveClientId();
+        var video = confirmUploadUseCase.execute(request.title(), request.key(), clientId,request.secondsPartition());
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new ConfirmUploadResponse(video.getId(), video.getUrl(), video.getStatus()));
+    }
 
     private String resolveClientId() {
         if (jwtSecurityProperties.isEnabled()) {
