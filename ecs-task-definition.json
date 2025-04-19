@@ -1,23 +1,17 @@
 {
   "family": "video-task",
   "networkMode": "awsvpc",
+  "executionRoleArn": "arn:aws:iam::ACCOUNT_ID:role/ecsTaskExecutionRole",
   "containerDefinitions": [
     {
       "name": "video-app",
-      "image": "<IMAGE_URI>",  // será substituído no GitHub Actions
+      "image": "REPLACE_ME_IMAGE_URI",
       "portMappings": [
         {
           "containerPort": 8080,
-          "hostPort": 8080
+          "hostPort": 8080,
+          "protocol": "tcp"
         }
-      ],
-      "essential": true,
-      "environment": [
-        { "name": "AWS_ACCESS_KEY_ID", "value": "<AWS_ACCESS_KEY_ID>" },
-        { "name": "AWS_SECRET_ACCESS_KEY", "value": "<AWS_SECRET_ACCESS_KEY>" },
-        { "name": "MONGO_USER", "value": "<MONGO_USER>" },
-        { "name": "MONGO_PASSWORD", "value": "<MONGO_PASSWORD>" },
-        { "name": "SQS_QUEUE_URL", "value": "<SQS_QUEUE_URL>" }
       ],
       "logConfiguration": {
         "logDriver": "awslogs",
@@ -26,11 +20,17 @@
           "awslogs-region": "us-east-1",
           "awslogs-stream-prefix": "ecs"
         }
-      }
+      },
+      "environment": [
+        { "name": "AWS_ACCESS_KEY_ID", "value": "" },
+        { "name": "AWS_SECRET_ACCESS_KEY", "value": "" },
+        { "name": "MONGO_USER", "value": "" },
+        { "name": "MONGO_PASSWORD", "value": "" },
+        { "name": "SQS_QUEUE_URL", "value": "" }
+      ]
     }
   ],
   "requiresCompatibilities": ["FARGATE"],
   "cpu": "512",
-  "memory": "1024",
-  "executionRoleArn": "arn:aws:iam::<YOUR_ACCOUNT_ID>:role/ecsTaskExecutionRole"
+  "memory": "1024"
 }
