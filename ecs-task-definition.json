@@ -1,18 +1,15 @@
 {
   "family": "video-task",
   "networkMode": "awsvpc",
-  "requiresCompatibilities": ["FARGATE"],
-  "cpu": "512",
-  "memory": "1024",
-  "executionRoleArn": "arn:aws:iam::<AWS_ACCOUNT_ID>:role/ecsTaskExecutionRole",
+  "executionRoleArn": "arn:aws:iam::ACCOUNT_ID:role/ecsTaskExecutionRole",
   "containerDefinitions": [
     {
       "name": "video-app",
-      "image": "<AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/video-service:latest",
-      "essential": true,
+      "image": "REPLACE_ME_IMAGE_URI",
       "portMappings": [
         {
           "containerPort": 8080,
+          "hostPort": 8080,
           "protocol": "tcp"
         }
       ],
@@ -25,12 +22,15 @@
         }
       },
       "environment": [
-        { "name": "AWS_ACCESS_KEY_ID", "value": "dummy" },
-        { "name": "AWS_SECRET_ACCESS_KEY", "value": "dummy" },
-        { "name": "MONGO_USER", "value": "dummy" },
-        { "name": "MONGO_PASSWORD", "value": "dummy" },
-        { "name": "SQS_QUEUE_URL", "value": "dummy" }
+        { "name": "AWS_ACCESS_KEY_ID", "value": "" },
+        { "name": "AWS_SECRET_ACCESS_KEY", "value": "" },
+        { "name": "MONGO_USER", "value": "" },
+        { "name": "MONGO_PASSWORD", "value": "" },
+        { "name": "SQS_QUEUE_URL", "value": "" }
       ]
     }
-  ]
+  ],
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "512",
+  "memory": "1024"
 }
