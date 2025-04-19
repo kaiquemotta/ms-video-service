@@ -4,11 +4,11 @@
   "requiresCompatibilities": ["FARGATE"],
   "cpu": "512",
   "memory": "1024",
-  "executionRoleArn": "arn:aws:iam::<AWS_ACCOUNT_ID>:role/ecsTaskExecutionRole",
+  "executionRoleArn": "arn:aws:iam::409139324592:role/ecsTaskExecutionRole",
   "containerDefinitions": [
     {
       "name": "video-app",
-      "image": "<AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/video-service:latest",
+      "image": "409139324592.dkr.ecr.us-east-1.amazonaws.com/video-service:latest",
       "essential": true,
       "portMappings": [
         {
