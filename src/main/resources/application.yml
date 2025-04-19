@@ -57,12 +57,7 @@ logging:
         security.oauth2: DEBUG
 
 management:
-  endpoints:
-    web:
-      exposure:
-        include: health
-  endpoint:
-    health:
-      show-details: always
-
+  health:
+    mongo:
+      enabled: false
 
