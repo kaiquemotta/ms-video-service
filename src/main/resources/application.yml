@@ -2,16 +2,13 @@ spring:
   application:
     name: video-service
 
-server:
-  port: 8080
+  data:
+    mongodb:
+      uri: ${MONGO_URI}
 
   output:
     ansi:
       enabled: ALWAYS
-
-  data:
-    mongodb:
-      uri: ${MONGO_URI}
 
   servlet:
     multipart:
@@ -32,7 +29,6 @@ cloud:
     credentials:
       accessKey: ${AWS_ACCESS_KEY_ID}
       secretKey: ${AWS_SECRET_ACCESS_KEY}
-
 
 aws:
   region: us-east-1
@@ -63,4 +59,3 @@ management:
   health:
     mongo:
       enabled: false
-
