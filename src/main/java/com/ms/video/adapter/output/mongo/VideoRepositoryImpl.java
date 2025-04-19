@@ -3,12 +3,15 @@ package com.ms.video.adapter.output.mongo;
 import com.ms.video.adapter.output.mongo.document.VideoDocument;
 import com.ms.video.domain.model.Video;
 import com.ms.video.port.output.VideoRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
 public class VideoRepositoryImpl implements VideoRepository {
+    private static final Logger log = LoggerFactory.getLogger(VideoRepositoryImpl.class);
 
     private final SpringDataVideoRepository mongoRepository;
 
@@ -32,7 +35,9 @@ public class VideoRepositoryImpl implements VideoRepository {
 
     @Override
     public List<Video> findByClientId(String clientId) {
-        return mongoRepository.findByClientId(clientId).stream()
+        log.info("Buscando vídeos para o clientId: {}", clientId);
+
+        List<Video> videos = mongoRepository.findByClientId(clientId).stream()
                 .map(doc -> new Video(
                         doc.getId(),
                         doc.getTitle(),
@@ -44,5 +49,8 @@ public class VideoRepositoryImpl implements VideoRepository {
                         doc.getCreatedAt(),
                         doc.getUpdatedAt()
                 )).toList();
+
+        log.info("Encontrados {} vídeos para o clientId {}", videos.size(), clientId);
+        return videos;
     }
 }

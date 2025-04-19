@@ -40,7 +40,7 @@ public class GlobalExceptionHandler {
 
     private ResponseEntity<?> buildResponse(HttpStatus status, String title, Exception ex) {
         return ResponseEntity.status(status).body(Map.of(
-                "type", "https://api.seusite.com/errors/" + status.name().toLowerCase().replace(" ", "-"),
+                "type", "error" + status.name().toLowerCase().replace(" ", "-"),
                 "title", title,
                 "status", status.value(),
                 "detail", ex.getMessage(),
