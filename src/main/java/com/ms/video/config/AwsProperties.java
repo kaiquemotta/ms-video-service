@@ -10,7 +10,6 @@ public class AwsProperties {
     private String accessKey;
     private String secretKey;
 
-
     public String getRegion() {
         return region;
     }
