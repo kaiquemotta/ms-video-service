@@ -29,7 +29,8 @@
         { "name": "AWS_SECRET_ACCESS_KEY", "value": "dummy" },
         { "name": "MONGO_USER", "value": "dummy" },
         { "name": "MONGO_PASSWORD", "value": "dummy" },
-        { "name": "SQS_QUEUE_URL", "value": "dummy" }
+        { "name": "SQS_QUEUE_URL", "value": "dummy" },
+        { "name": "MONGO_URI", "value": "dummy" }
       ]
     }
   ]
