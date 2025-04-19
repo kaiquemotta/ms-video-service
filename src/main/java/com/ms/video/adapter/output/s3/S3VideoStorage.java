@@ -35,7 +35,7 @@ public class S3VideoStorage implements VideoStorage {
                             .build(),
                     RequestBody.fromInputStream(file.getInputStream(), file.getSize())
             );
-
+            System.out.println("REG");
             return "https://" + bucketName + ".s3.amazonaws.com/" + key;
 
         } catch (Exception e) {
