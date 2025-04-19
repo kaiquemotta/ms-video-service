@@ -65,6 +65,7 @@ public class VideoController {
     @PostMapping("/confirm-upload")
     public ResponseEntity<ConfirmUploadResponse> confirm(@RequestBody ConfirmUploadRequest request) {
         String clientId = resolveClientId();
+        System.out.println("NOVA VERSAO");
         var video = confirmUploadUseCase.execute(request.title(), request.key(), clientId,request.secondsPartition());
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new ConfirmUploadResponse(video.getId(), video.getUrl(), video.getStatus()));
