@@ -49,12 +49,15 @@ security:
 
 logging:
   level:
-    root: INFO
+    root: DEBUG
     org:
       springframework:
-        security: DEBUG
         web: DEBUG
+        security: DEBUG
         security.oauth2: DEBUG
+        boot:
+          actuate:
+            health: INFO
 
 management:
   health:
