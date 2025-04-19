@@ -8,7 +8,7 @@ spring:
 
   data:
     mongodb:
-      uri: mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@video-db.yjexuqs.mongodb.net/video-db?retryWrites=true&w=majority&appName=video-db
+      uri: mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@video-db.yjexuqs.mongodb.net/video-db?retryWrites=true&w=majority
 
   servlet:
     multipart:
