@@ -11,7 +11,7 @@ import javax.crypto.spec.SecretKeySpec;
 @Configuration
 public class JwtConfig {
 
-    @Value("${jwt.secret:my-secret-key-for-dev}")
+    @Value("${spring.security.oauth2.resourceserver.jwt.secret-key}")
     private String secret;
 
     @Bean

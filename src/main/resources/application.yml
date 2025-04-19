@@ -22,7 +22,8 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: https://seu-auth.com/
+          secret-key: 8rTf&Y9z!LmK3$Vp@Wq2Xt#gN5Ah4bR7PcM+jLQs
+
 
 cloud:
   aws:
@@ -41,7 +42,7 @@ sqs:
 
 security:
   jwt:
-    enabled: false
+    enabled: true
 
 logging:
   level:
