@@ -37,7 +37,10 @@ public class VideoController {
         this.listVideosByClientUseCase = listVideosByClientUseCase;
         this.confirmUploadUseCase = confirmUploadUseCase;
     }
-
+    @GetMapping("/debug")
+    public ResponseEntity<String> debug() {
+        return ResponseEntity.ok(System.getenv("MONGO_URI"));
+    }
 
     @GetMapping
     public ResponseEntity<List<VideoResponse>> listByClient() {
