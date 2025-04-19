@@ -8,7 +8,7 @@ env:
   AWS_REGION: us-east-1
   ECR_REPOSITORY: video-service
   ECS_CLUSTER: video-cluster
-  ECS_SERVICE: video-service-bal
+  ECS_SERVICE: video-service
   TASK_DEFINITION_FILE: ecs-task-definition.json
 
 jobs:
