@@ -16,8 +16,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout repo
         uses: actions/checkout@v3
+
+      - name: Dar permissão ao Maven Wrapper
+        run: chmod +x ./mvnw
+
+      - name: Build com Maven
+        run: ./mvnw clean package -DskipTests
 
       - name: Set up JDK
         uses: actions/setup-java@v3
