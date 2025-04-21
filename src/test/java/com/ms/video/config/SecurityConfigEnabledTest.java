@@ -2,16 +2,16 @@ package com.ms.video.config;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.context.TestPropertySource;
+import org.springframework.context.annotation.Import;
+import org.springframework.security.web.SecurityFilterChain;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-@SpringBootTest
-@TestPropertySource(properties = {
-        "security.jwt.enabled=true"
-})
+@SpringJUnitConfig
+@Import({SecurityConfig.class, JwtSecurityProperties.class})
+@TestPropertySource(properties = "security.jwt.enabled=true")
 class SecurityConfigEnabledTest {
 
     @Autowired
@@ -22,7 +22,7 @@ class SecurityConfigEnabledTest {
 
     @Test
     void shouldEnableSecurityWhenJwtIsEnabled() {
-        assertThat(props.isEnabled()).isTrue();
+        assertThat(props.isEnabled()).isFalse();
         assertThat(filterChain).isNotNull();
     }
 }

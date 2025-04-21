@@ -2,14 +2,16 @@ package com.ms.video.config;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.TestPropertySource;
 import software.amazon.awssdk.services.s3.S3Client;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(properties = {
-        "aws.region=us-east-1"
-})
+@SpringJUnitConfig
+@Import(AwsS3Config.class)
+@TestPropertySource(properties = "aws.region=us-east-1")
 class AwsS3ConfigTest {
 
     @Autowired

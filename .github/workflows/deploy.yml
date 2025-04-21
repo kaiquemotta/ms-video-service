@@ -1,8 +1,12 @@
-name: Deploy to AWS ECS
+name: CI/CD com SonarCloud + Deploy ECS
 
 on:
   push:
-    branches: [ master ]
+    branches-ignore:
+      - main
+      - master
+  pull_request:
+    types: [closed]
 
 env:
   AWS_REGION: us-east-1
@@ -12,7 +16,47 @@ env:
   TASK_DEFINITION_FILE: ecs-task-definition.json
 
 jobs:
-  deploy:
+  test-and-analyze:
+    name: Testes e SonarCloud
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+
+    services:
+      mongo:
+        image: mongo:6.0
+        ports:
+          - 27017:27017
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v3
+
+      - name: Dar permissão ao Maven Wrapper
+        run: chmod +x ./mvnw
+
+      - name: Configurar Java 17
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Esperar o Mongo inicializar
+        run: sleep 10
+
+      - name: Rodar testes com cobertura + SonarCloud
+        run: |
+          ./mvnw clean verify sonar:sonar \
+            -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
+            -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }} \
+            -Dsonar.host.url=https://sonarcloud.io \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+            -Dsonar.coverage.exclusions=**/config/**,**/model/**,**/dto/**,**/exception/**
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  deploy-to-ecs:
+    name: Deploy para produção (ECS)
+    if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'master'
     runs-on: ubuntu-latest
 
     steps:
@@ -40,7 +84,8 @@ jobs:
 
       - name: Login no Amazon ECR
         run: |
-           aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.$AWS_REGION.amazonaws.com
+          aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.$AWS_REGION.amazonaws.com
+
       - name: Build e Push da imagem Docker
         run: |
           IMAGE_TAG=latest
