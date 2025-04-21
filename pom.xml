@@ -16,7 +16,9 @@
 	</parent>
 	<properties>
 		<java.version>17</java.version>
-		<spring-boot.version>3.2.5</spring-boot.version> <!-- ou versão compatível -->
+		<spring-boot.version>3.2.5</spring-boot.version>
+		<sonar.organization>kaiquemotta</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
 	</properties>
 
 	<dependencyManagement>
