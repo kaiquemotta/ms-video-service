@@ -24,12 +24,13 @@ public class VideoDocument {
     protected VideoDocument() {
     }
 
-    public VideoDocument(String title, String url, String clientId, String status, Integer secondsPartition, LocalDateTime createdAt) {
+    public VideoDocument(String title, String url, String clientId, String status, Integer secondsPartition,String urlZip, LocalDateTime createdAt) {
         this.title = title;
         this.url = url;
         this.clientId = clientId;
         this.status = status;
         this.secondsPartition = secondsPartition;
+        this.urlZip = urlZip;
         this.createdAt = createdAt;
         this.updatedAt = null;
     }

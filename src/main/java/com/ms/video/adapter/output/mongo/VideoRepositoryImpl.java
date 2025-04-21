@@ -26,6 +26,7 @@ public class VideoRepositoryImpl implements VideoRepository {
                 video.getClientId(),
                 video.getStatus(),
                 video.getSecondsPartition(),
+                video.getUrlZip(),
                 video.getCreatedAt()
         );
 

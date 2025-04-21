@@ -1,0 +1,13 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/test-db
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          secret-key: dummy
+
+security:
+  jwt:
+    enabled: false
