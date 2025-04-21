@@ -1,7 +1,10 @@
 name: CI/CD com SonarCloud + Deploy ECS
 
 on:
-  push:  # Agora roda em todas as branches!
+  push:
+    branches-ignore:
+      - main
+      - master
   pull_request:
     types: [closed]
 
