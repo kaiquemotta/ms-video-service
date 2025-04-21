@@ -18,6 +18,7 @@ env:
 jobs:
   test-and-analyze:
     name: Testes e SonarCloud
+    if: github.event_name == 'push'
     runs-on: ubuntu-latest
 
     services:
@@ -84,7 +85,6 @@ jobs:
       - name: Login no Amazon ECR
         run: |
           aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.$AWS_REGION.amazonaws.com
-
 
       - name: Build e Push da imagem Docker
         run: |
