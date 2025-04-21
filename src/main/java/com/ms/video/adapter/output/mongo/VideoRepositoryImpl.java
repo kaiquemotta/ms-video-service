@@ -36,7 +36,7 @@ public class VideoRepositoryImpl implements VideoRepository {
 
     @Override
     public List<Video> findByClientId(String clientId) {
-        log.info("-> Buscando vídeos para o clientId: {}", clientId);
+        log.info(" Buscando vídeos para o clientId: {}", clientId);
 
         List<Video> videos = mongoRepository.findByClientId(clientId).stream()
                 .map(doc -> new Video(
