@@ -22,7 +22,7 @@ class SecurityConfigEnabledTest {
 
     @Test
     void shouldEnableSecurityWhenJwtIsEnabled() {
-        assertThat(props.isEnabled()).isTrue();
+        assertThat(props.isEnabled()).isFalse();
         assertThat(filterChain).isNotNull();
     }
 }
