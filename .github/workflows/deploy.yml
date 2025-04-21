@@ -1,10 +1,7 @@
 name: CI/CD com SonarCloud + Deploy ECS
 
 on:
-  push:
-    branches-ignore:
-      - main
-      - master
+  push:  # Agora roda em todas as branches!
   pull_request:
     types: [closed]
 
@@ -18,7 +15,6 @@ env:
 jobs:
   test-and-analyze:
     name: Testes e SonarCloud
-    if: github.event_name == 'push'
     runs-on: ubuntu-latest
 
     services:
