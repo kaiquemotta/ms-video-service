@@ -159,21 +159,14 @@
 						</goals>
 					</execution>
 					<execution>
-						<id>report-xml</id>
+						<id>report</id>
 						<phase>verify</phase>
 						<goals>
 							<goal>report</goal>
 						</goals>
-						<configuration>
-							<outputDirectory>${project.build.directory}/jacoco-report</outputDirectory>
-							<reports>
-								<report>xml</report>
-							</reports>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>
-
 		</plugins>
 	</build>
 	<reporting>
@@ -185,4 +178,5 @@
 			</plugin>
 		</plugins>
 	</reporting>
+
 </project>
