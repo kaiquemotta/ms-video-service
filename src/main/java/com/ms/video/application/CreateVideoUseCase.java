@@ -40,7 +40,7 @@ public class CreateVideoUseCase {
         try {
             return videoStorage.upload(file);
         } catch (Exception e) {
-            log.error("    --- Erro ao fazer upload do vídeo ---", e);
+            log.error("--- Erro ao fazer upload do vídeo ---", e);
             throw new VideoUploadException("Falha ao enviar vídeo para o S3", e);
         }
     }
