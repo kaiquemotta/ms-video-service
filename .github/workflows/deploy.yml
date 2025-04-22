@@ -3,8 +3,7 @@ name: CI/CD com SonarCloud + Deploy ECS
 on:
   push:
     branches-ignore:
-      - main
-      - master
+      - '**'  # Qualquer branch, inclusive master
   pull_request:
     types: [closed]
 
