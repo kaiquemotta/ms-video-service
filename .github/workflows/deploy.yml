@@ -2,11 +2,10 @@ name: CI/CD com SonarCloud + Deploy ECS
 
 on:
   push:
-    branches-ignore:
-      - main
-      - master
+    branches:
+      - '**'
   pull_request:
-    types: [closed]
+    types: [opened, synchronize, reopened, closed]
 
 env:
   AWS_REGION: us-east-1
@@ -18,7 +17,7 @@ env:
 jobs:
   test-and-analyze:
     name: Testes e SonarCloud
-    if: github.event_name == 'push'
+    if: github.event.pull_request.merged != true || github.event_name == 'push'
     runs-on: ubuntu-latest
 
     services:
@@ -40,7 +39,6 @@ jobs:
           distribution: temurin
           java-version: 17
 
-
       - name: Esperar o Mongo inicializar
         run: sleep 10
 
@@ -49,12 +47,12 @@ jobs:
 
       - name: Analisar com SonarCloud
         run: |
-          ./mvnw clean verify sonar:sonar \
+          ./mvnw sonar:sonar \
             -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
             -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }} \
             -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
-
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
+            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
