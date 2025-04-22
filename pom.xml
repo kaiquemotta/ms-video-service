@@ -159,11 +159,17 @@
 						</goals>
 					</execution>
 					<execution>
-						<id>report</id>
-						<phase>verify</phase> <!-- antes estava em prepare-package -->
+						<id>report-xml</id>
+						<phase>verify</phase>
 						<goals>
 							<goal>report</goal>
 						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/jacoco-report</outputDirectory>
+							<reports>
+								<report>xml</report>
+							</reports>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>
