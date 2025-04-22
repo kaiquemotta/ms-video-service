@@ -160,14 +160,13 @@
 					</execution>
 					<execution>
 						<id>report</id>
-						<phase>verify</phase> <!-- antes estava em prepare-package -->
+						<phase>verify</phase>
 						<goals>
 							<goal>report</goal>
 						</goals>
 					</execution>
 				</executions>
 			</plugin>
-
 		</plugins>
 	</build>
 	<reporting>
@@ -179,4 +178,5 @@
 			</plugin>
 		</plugins>
 	</reporting>
+
 </project>

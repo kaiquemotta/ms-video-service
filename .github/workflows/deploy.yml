@@ -40,17 +40,21 @@ jobs:
           distribution: temurin
           java-version: 17
 
+
       - name: Esperar o Mongo inicializar
         run: sleep 10
 
-      - name: Rodar testes com cobertura + SonarCloud
+      - name: Rodar testes (Jacoco)
+        run: ./mvnw clean verify
+
+      - name: Analisar com SonarCloud
         run: |
           ./mvnw clean verify sonar:sonar \
             -Dsonar.projectKey=${{ secrets.SONAR_PROJECT_KEY }} \
             -Dsonar.organization=${{ secrets.SONAR_ORGANIZATION }} \
             -Dsonar.host.url=https://sonarcloud.io \
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }} \
-            -Dsonar.coverage.jacoco.xmlReportPaths=target/site/jacoco/jacoco.xml
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
