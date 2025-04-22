@@ -40,6 +40,7 @@ jobs:
           distribution: temurin
           java-version: 17
 
+
       - name: Esperar o Mongo inicializar
         run: sleep 10
 
